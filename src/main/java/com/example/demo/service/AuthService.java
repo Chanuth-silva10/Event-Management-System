@@ -34,6 +34,10 @@ public class AuthService {
     public UserResponse register(CreateUserRequest request) {
         log.info("Registering new user with email: {}", request.getEmail());
 
+        if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException("Email is already in use: " + request.getEmail());
         }
@@ -68,6 +72,10 @@ public class AuthService {
 
         log.info("User logged in successfully: {}", user.getId());
 
-        return new JwtResponse(jwt, userResponse);
+        return JwtResponse.builder()
+                .token(jwt)
+                .type("Bearer")
+                .user(userResponse)
+                .build();
     }
 }

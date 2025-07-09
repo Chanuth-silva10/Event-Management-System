@@ -37,7 +37,8 @@ public class EventService {
     public EventResponse createEvent(CreateEventRequest request, Authentication authentication) {
         User currentUser = getCurrentUser(authentication);
         
-        if (request.getEndTime().isBefore(request.getStartTime())) {
+        if (request.getEndTime().isBefore(request.getStartTime()) || 
+            request.getEndTime().isEqual(request.getStartTime())) {
             throw new IllegalArgumentException("End time must be after start time");
         }
 
@@ -166,6 +167,9 @@ public class EventService {
     }
 
     private User getCurrentUser(Authentication authentication) {
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new UnauthorizedException("Authentication required");
+        }
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return userService.getUserById(userPrincipal.getId());
     }

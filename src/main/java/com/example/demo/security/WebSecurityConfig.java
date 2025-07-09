@@ -55,6 +55,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/events/upcoming").permitAll()
                         .anyRequest().authenticated()
                 );
 

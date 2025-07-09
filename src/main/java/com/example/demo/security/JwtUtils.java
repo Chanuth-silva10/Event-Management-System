@@ -25,12 +25,29 @@ public class JwtUtils {
     }
 
     public String generateJwtToken(Authentication authentication) {
+        if (authentication == null) {
+            throw new IllegalArgumentException("Authentication cannot be null");
+        }
+        
+        if (authentication.getPrincipal() == null) {
+            throw new IllegalArgumentException("Authentication principal cannot be null");
+        }
+        
+        if (!(authentication.getPrincipal() instanceof UserPrincipal)) {
+            throw new ClassCastException("Principal must be an instance of UserPrincipal");
+        }
+        
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
+        // Use current time with nanoseconds to ensure uniqueness
+        long currentTimeMs = System.currentTimeMillis();
+        long nanoTime = System.nanoTime();
+        
         return Jwts.builder()
                 .subject(userPrincipal.getId().toString())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .issuedAt(new Date(currentTimeMs))
+                .expiration(new Date(currentTimeMs + jwtExpirationMs))
+                .claim("nonce", nanoTime) // Add unique nonce to ensure different tokens
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -45,12 +62,19 @@ public class JwtUtils {
     }
 
     public boolean validateJwtToken(String authToken) {
+        if (authToken == null || authToken.trim().isEmpty()) {
+            log.error("JWT token is null or empty");
+            return false;
+        }
+        
         try {
             Jwts.parser()
                     .verifyWith(getSigningKey())
                     .build()
                     .parseSignedClaims(authToken);
             return true;
+        } catch (io.jsonwebtoken.security.SignatureException e) {
+            log.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
             log.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {

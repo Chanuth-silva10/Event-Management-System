@@ -1,6 +1,6 @@
 # Event Management System API
 
-A scalable, production-ready RESTful API for event management built with Spring Boot 3.x, featuring JWT authentication, role-based access control, caching, rate limiting, and comprehensive event management capabilities.
+A scalable, production-ready RESTful API for event management built with Spring Boot 3, featuring JWT authentication, role-based access control, caching, rate limiting, and comprehensive event management capabilities.
 
 ## Features
 
