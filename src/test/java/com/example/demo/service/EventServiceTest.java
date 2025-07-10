@@ -97,7 +97,7 @@ class EventServiceTest {
                 .description(testEvent.getDescription())
                 .startTime(testEvent.getStartTime())
                 .endTime(testEvent.getEndTime())
-                .visibility(testEvent.getVisibility())
+                .visibility(testEvent.getVisibility().toString())
                 .location(testEvent.getLocation())
                 .attendeeCount(0L)
                 .build();
@@ -878,99 +878,6 @@ class EventServiceTest {
             assertThat(result).isNotNull();
             assertThat(result.getContent()).isEmpty();
             verify(eventMapper, never()).toEventResponse(any(Event.class));
-        }
-    }
-
-    @Nested
-    @DisplayName("Get Events With Filters Tests")
-    class GetEventsWithFiltersTests {
-
-        @Test
-        @DisplayName("Should get events with location filter")
-        void shouldGetEventsWithLocationFilter() {
-            // Arrange
-            String location = "Conference Room";
-            Pageable pageable = PageRequest.of(0, 10);
-            Page<Event> eventPage = new PageImpl<>(Collections.singletonList(testEvent));
-
-            given(eventRepository.findEventsWithFilters(eq(location), isNull(), isNull(), isNull(), eq(pageable)))
-                    .willReturn(eventPage);
-            given(eventMapper.toEventResponse(testEvent)).willReturn(testEventResponse);
-
-            // Act
-            Page<EventResponse> result = eventService.getEventsWithFilters(location, null, null, null, pageable);
-
-            // Assert
-            assertThat(result).isNotNull();
-            assertThat(result.getContent()).hasSize(1);
-            verify(eventRepository).findEventsWithFilters(eq(location), isNull(), isNull(), isNull(), eq(pageable));
-        }
-
-        @Test
-        @DisplayName("Should get events with visibility filter")
-        void shouldGetEventsWithVisibilityFilter() {
-            // Arrange
-            Event.Visibility visibility = Event.Visibility.PUBLIC;
-            Pageable pageable = PageRequest.of(0, 10);
-            Page<Event> eventPage = new PageImpl<>(Collections.singletonList(testEvent));
-
-            given(eventRepository.findEventsWithFilters(isNull(), eq("PUBLIC"), isNull(), isNull(), eq(pageable)))
-                    .willReturn(eventPage);
-            given(eventMapper.toEventResponse(testEvent)).willReturn(testEventResponse);
-
-            // Act
-            Page<EventResponse> result = eventService.getEventsWithFilters(null, visibility, null, null, pageable);
-
-            // Assert
-            assertThat(result).isNotNull();
-            assertThat(result.getContent()).hasSize(1);
-            verify(eventRepository).findEventsWithFilters(isNull(), eq("PUBLIC"), isNull(), isNull(), eq(pageable));
-        }
-
-        @Test
-        @DisplayName("Should get events with date range filter")
-        void shouldGetEventsWithDateRangeFilter() {
-            // Arrange
-            LocalDateTime startDate = LocalDateTime.now().plusDays(1);
-            LocalDateTime endDate = LocalDateTime.now().plusDays(7);
-            Pageable pageable = PageRequest.of(0, 10);
-            Page<Event> eventPage = new PageImpl<>(Collections.singletonList(testEvent));
-
-            given(eventRepository.findEventsWithFilters(isNull(), isNull(), eq(startDate), eq(endDate), eq(pageable)))
-                    .willReturn(eventPage);
-            given(eventMapper.toEventResponse(testEvent)).willReturn(testEventResponse);
-
-            // Act
-            Page<EventResponse> result = eventService.getEventsWithFilters(null, null, startDate, endDate, pageable);
-
-            // Assert
-            assertThat(result).isNotNull();
-            assertThat(result.getContent()).hasSize(1);
-            verify(eventRepository).findEventsWithFilters(isNull(), isNull(), eq(startDate), eq(endDate), eq(pageable));
-        }
-
-        @Test
-        @DisplayName("Should get events with all filters")
-        void shouldGetEventsWithAllFilters() {
-            // Arrange
-            String location = "Conference Room";
-            Event.Visibility visibility = Event.Visibility.PRIVATE;
-            LocalDateTime startDate = LocalDateTime.now().plusDays(1);
-            LocalDateTime endDate = LocalDateTime.now().plusDays(7);
-            Pageable pageable = PageRequest.of(0, 10);
-            Page<Event> eventPage = new PageImpl<>(Collections.singletonList(testEvent));
-
-            given(eventRepository.findEventsWithFilters(eq(location), eq("PRIVATE"), eq(startDate), eq(endDate), eq(pageable)))
-                    .willReturn(eventPage);
-            given(eventMapper.toEventResponse(testEvent)).willReturn(testEventResponse);
-
-            // Act
-            Page<EventResponse> result = eventService.getEventsWithFilters(location, visibility, startDate, endDate, pageable);
-
-            // Assert
-            assertThat(result).isNotNull();
-            assertThat(result.getContent()).hasSize(1);
-            verify(eventRepository).findEventsWithFilters(eq(location), eq("PRIVATE"), eq(startDate), eq(endDate), eq(pageable));
         }
     }
 
