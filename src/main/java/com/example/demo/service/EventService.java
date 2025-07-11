@@ -221,6 +221,9 @@ public class EventService {
     }
 
     private User getCurrentUser(Authentication authentication) {
+        if (authentication == null) {
+            throw new UnauthorizedException("Authentication required");
+        }
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return userService.getUserById(userPrincipal.getId());
     }
