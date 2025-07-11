@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "ff89db96-824e-4083-b5b1-5344e0a31175",
-		"name": "Event_Management_API_Complete_Updated.postman_collection",
+		"name": "Event_Management_API.postman_collection",
 		"description": "Complete API collection for Event Management System with comprehensive test cases for all endpoints. Base URL: http://localhost:8080/api/v1",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "24118288"
