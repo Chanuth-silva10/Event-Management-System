@@ -1,5 +1,6 @@
 package com.example.demo.domain.dto.response;
 
+import com.example.demo.domain.entity.Event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class EventResponse extends RepresentationModel<EventResponse> {
+public class EventResponseWithLinks extends RepresentationModel<EventResponseWithLinks> {
+
     private UUID id;
     private String title;
     private String description;
@@ -29,7 +31,7 @@ public class EventResponse extends RepresentationModel<EventResponse> {
     private LocalDateTime endTime;
 
     private String location;
-    private String visibility;
+    private Event.Visibility visibility;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;

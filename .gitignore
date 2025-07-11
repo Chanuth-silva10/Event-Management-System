@@ -33,4 +33,7 @@ build/
 .vscode/
 
 ### Documentation and Testing Files ###
-event_management_testing_flow.md
+EVENT_MANAGEMENT_TESTING_FLOW.md
+EVENT_FILTERING_GUIDE.md
+ENDPOINT_ANALYSIS.md
+

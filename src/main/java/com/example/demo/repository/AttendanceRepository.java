@@ -26,5 +26,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Attendan
     @Query("SELECT COUNT(a) FROM Attendance a WHERE a.event = :event AND a.status = :status")
     long countByEventAndStatus(@Param("event") Event event, @Param("status") Attendance.Status status);
 
-    boolean existsByEventAndUser(Event event, User user);
+    @Query("SELECT COUNT(a) FROM Attendance a WHERE a.event = :event")
+    long countByEvent(@Param("event") Event event);
 }

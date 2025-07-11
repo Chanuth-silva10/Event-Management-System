@@ -5,6 +5,7 @@ import com.example.demo.domain.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface EventRepository extends JpaRepository<Event, UUID> {
+public interface EventRepository extends JpaRepository<Event, UUID>, JpaSpecificationExecutor<Event> {
 
     @Query("SELECT e FROM Event e WHERE e.deleted = false")
     Page<Event> findAllActive(Pageable pageable);
@@ -24,20 +25,6 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     @Query("SELECT e FROM Event e WHERE e.deleted = false AND e.startTime >= :startTime")
     Page<Event> findUpcomingEvents(@Param("startTime") LocalDateTime startTime, Pageable pageable);
-
-    @Query(value = "SELECT e.* FROM events e WHERE e.deleted = false " +
-           "AND (:location IS NULL OR LOWER(e.location) LIKE LOWER(CONCAT('%', :location, '%'))) " +
-           "AND (:visibility IS NULL OR e.visibility = CAST(:visibility AS VARCHAR)) " +
-           "AND (:startDate IS NULL OR e.start_time >= :startDate) " +
-           "AND (:endDate IS NULL OR e.end_time <= :endDate) " +
-           "ORDER BY e.start_time",
-           nativeQuery = true)
-    Page<Event> findEventsWithFilters(
-            @Param("location") String location,
-            @Param("visibility") String visibility,
-            @Param("startDate") LocalDateTime startDate,
-            @Param("endDate") LocalDateTime endDate,
-            Pageable pageable);
 
     @Query("SELECT e FROM Event e WHERE e.deleted = false AND e.host = :host")
     Page<Event> findByHost(@Param("host") User host, Pageable pageable);
