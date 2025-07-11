@@ -2,6 +2,8 @@
 
 A scalable, production-ready RESTful API for event management built with Spring Boot 3, featuring JWT authentication, role-based access control, caching, rate limiting, and comprehensive event management capabilities.
 
+Api Collection - https://lively-rocket-514967.postman.co/workspace/public-api-collection~90eaf496-50de-4355-a29c-fe5ac46c0922/collection/24118288-d9874c7e-f717-43cd-b5d7-604d71b2f964?action=share&source=copy-link&creator=24118288
+
 ## Features
 
 ### Core Features
